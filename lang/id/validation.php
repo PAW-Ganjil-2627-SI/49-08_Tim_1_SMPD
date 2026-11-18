@@ -213,6 +213,15 @@ return [
         'stock' => 'stok',
         'status' => 'status',
         'bio' => 'biografi',
+
+        // Fasilitas & Area
+        'type' => 'tipe',
+        'floor_number' => 'lantai',
+        'capacity' => 'kapasitas',
+        'reading_areas' => 'area baca',
+        'reading_areas.*' => 'area baca',
+        'facilities' => 'fasilitas',
+        'facilities.*' => 'fasilitas',
     ],
 
 ];
