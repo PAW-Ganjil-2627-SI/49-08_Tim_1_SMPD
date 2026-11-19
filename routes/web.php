@@ -5,21 +5,11 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Public Routes
-|--------------------------------------------------------------------------
-*/
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-/*
-|--------------------------------------------------------------------------
-| Authenticated Routes
-|--------------------------------------------------------------------------
-*/
 
 Route::middleware('auth')->group(function () {
 
@@ -36,21 +26,11 @@ Route::middleware('auth')->group(function () {
         ->name('profile.destroy');
 });
 
-/*
-|--------------------------------------------------------------------------
-| Operational Modules (Admin & Petugas)
-|--------------------------------------------------------------------------
-*/
 
 Route::middleware(['auth', 'role:admin,petugas'])->group(function () {
     Route::resource('books', BookController::class);
 });
 
-/*
-|--------------------------------------------------------------------------
-| Admin Only Routes
-|--------------------------------------------------------------------------
-*/
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     //
