@@ -71,10 +71,10 @@ return [
                 [
                     'label' => 'Fasilitas & Area',
                     'icon' => 'map',
-                    'route' => 'reading-areas.index',
-                    'active' => ['facilities.*', 'reading-areas.*'],
+                    'route' => 'facilities.index',
+                    'active' => 'facilities.*',
                     'module' => true,
-                    'description' => 'Kelola area baca, fasilitas perpustakaan, dan relasinya.',
+                    'description' => 'Kelola area baca dan fasilitas perpustakaan.',
                 ],
             ],
         ],
