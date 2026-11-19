@@ -2,9 +2,7 @@
 
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\FacilityController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ReadingAreaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,14 +34,6 @@ Route::middleware('auth')->group(function () {
 
     Route::delete('/profile', [ProfileController::class, 'destroy'])
         ->name('profile.destroy');
-
-    /*
-    |----------------------------------------------------------------------
-    | Modul Perpustakaan - Fasilitas & Area Baca
-    |----------------------------------------------------------------------
-    */
-    Route::resource('reading-areas', ReadingAreaController::class);
-    Route::resource('facilities', FacilityController::class);
 });
 
 /*
