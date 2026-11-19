@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MemberController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -44,6 +45,8 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', 'role:admin,petugas'])->group(function () {
     Route::resource('books', BookController::class);
+    Route::get('/members/{member}/print-card', [MemberController::class, 'printCard'])->name('members.print-card');
+    Route::resource('members', MemberController::class);
 });
 
 /*
