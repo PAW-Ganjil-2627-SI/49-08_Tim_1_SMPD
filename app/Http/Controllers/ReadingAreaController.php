@@ -11,9 +11,7 @@ use Illuminate\View\View;
 
 class ReadingAreaController extends Controller
 {
-    /**
-     * Tampilkan daftar area baca beserta fasilitas yang tersedia (Read).
-     */
+    
     public function index(Request $request): View
     {
         $search = $request->query('search');
@@ -56,10 +54,8 @@ class ReadingAreaController extends Controller
             'total_facilities' => Facility::count(),
         ];
 
-        // Daftar fasilitas untuk dropdown filter
         $availableFacilities = Facility::orderBy('name')->get(['id', 'name', 'type']);
 
-        // Daftar lantai yang ada untuk filter
         $existingFloors = ReadingArea::select('floor_number')
             ->distinct()
             ->orderBy('floor_number')
@@ -79,9 +75,6 @@ class ReadingAreaController extends Controller
         ]);
     }
 
-    /**
-     * Form tambah area baca baru (Create).
-     */
     public function create(): View
     {
         $facilities = Facility::orderBy('type')->orderBy('name')->get();
@@ -91,9 +84,7 @@ class ReadingAreaController extends Controller
         ]);
     }
 
-    /**
-     * Simpan data area baca baru ke database beserta relasi fasilitas (Store).
-     */
+    
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
@@ -114,7 +105,6 @@ class ReadingAreaController extends Controller
             'status' => $validated['status'],
         ]);
 
-        // Hubungkan fasilitas yang dipilih (many-to-many pivot)
         $readingArea->facilities()->sync($validated['facilities'] ?? []);
 
         return redirect()
@@ -122,9 +112,7 @@ class ReadingAreaController extends Controller
             ->with('success', 'Area baca "'.$readingArea->name.'" berhasil ditambahkan.');
     }
 
-    /**
-     * Tampilkan detail area baca dan fasilitas lengkap yang tersedia (Read/Detail).
-     */
+    
     public function show(ReadingArea $readingArea): View
     {
         $readingArea->load('facilities');
@@ -134,9 +122,7 @@ class ReadingAreaController extends Controller
         ]);
     }
 
-    /**
-     * Form edit area baca (Edit).
-     */
+    
     public function edit(ReadingArea $readingArea): View
     {
         $readingArea->load('facilities');
@@ -150,9 +136,7 @@ class ReadingAreaController extends Controller
         ]);
     }
 
-    /**
-     * Perbarui data area baca dan perbarui relasi fasilitas (Update).
-     */
+    
     public function update(Request $request, ReadingArea $readingArea): RedirectResponse
     {
         $validated = $request->validate([
@@ -173,7 +157,6 @@ class ReadingAreaController extends Controller
             'status' => $validated['status'],
         ]);
 
-        // Sinkronisasi relasi fasilitas yang dipilih
         $readingArea->facilities()->sync($validated['facilities'] ?? []);
 
         return redirect()
@@ -181,14 +164,11 @@ class ReadingAreaController extends Controller
             ->with('success', 'Area baca "'.$readingArea->name.'" berhasil diperbarui.');
     }
 
-    /**
-     * Hapus data area baca dari database (Delete).
-     */
+    
     public function destroy(ReadingArea $readingArea): RedirectResponse
     {
         $name = $readingArea->name;
 
-        // Tabel pivot area_facilities terhapus otomatis melalui cascade on delete di migration
         $readingArea->delete();
 
         return redirect()

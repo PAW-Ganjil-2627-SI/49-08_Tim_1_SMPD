@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Facility extends Model
 {
-    /** @use HasFactory<\Database\Factories\FacilityFactory> */
+   
     use HasFactory;
 
     protected $fillable = [
@@ -19,7 +19,7 @@ class Facility extends Model
 
     public function readingAreas()
     {
-        // Pivot: area_facilities (area_id, facility_id), tanpa timestamps.
+   
         return $this->belongsToMany(ReadingArea::class, 'area_facilities', 'facility_id', 'area_id');
     }
 }

@@ -163,7 +163,6 @@ class FacilityController extends Controller
             'status' => $validated['status'],
         ]);
 
-        // Sinkronisasi relasi area baca
         $facility->readingAreas()->sync($validated['reading_areas'] ?? []);
 
         return redirect()
@@ -171,14 +170,10 @@ class FacilityController extends Controller
             ->with('success', 'Fasilitas "'.$facility->name.'" berhasil diperbarui.');
     }
 
-    /**
-     * Hapus fasilitas dari database (Delete).
-     */
     public function destroy(Facility $facility): RedirectResponse
     {
         $name = $facility->name;
 
-        // Tabel pivot area_facilities terhapus otomatis melalui cascade on delete di migration
         $facility->delete();
 
         return redirect()
