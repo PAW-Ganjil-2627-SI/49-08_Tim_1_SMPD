@@ -213,6 +213,10 @@ return [
         'stock' => 'stok',
         'status' => 'status',
         'bio' => 'biografi',
+
+        // Penerbit & Supplier
+        'contact_person' => 'kontak sales / narahubung',
+        'region' => 'wilayah asal',
     ],
 
 ];
