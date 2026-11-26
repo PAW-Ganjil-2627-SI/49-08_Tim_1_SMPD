@@ -13,9 +13,7 @@ use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
-    /**
-     * Tampilkan dashboard beserta statistik ringkas dari database.
-     */
+
     public function index(Request $request): View
     {
         $user = $request->user();
@@ -37,14 +35,12 @@ class DashboardController extends Controller
             'available_reading_areas' => ReadingArea::where('status', 'available')->count(),
         ];
 
-        // Eager load relasi agar tidak terjadi N+1 query saat ditampilkan.
         $latestBooks = Book::query()
             ->with(['category:id,name', 'publisher:id,name'])
             ->latest()
             ->limit(5)
             ->get(['id', 'title', 'category_id', 'publisher_id', 'publication_year', 'created_at']);
 
-        // Data khusus Admin hanya di-query ketika user adalah admin.
         $usersByRole = $user->role === 'admin'
             ? User::query()->selectRaw('role, count(*) as total')->groupBy('role')->pluck('total', 'role')
             : null;

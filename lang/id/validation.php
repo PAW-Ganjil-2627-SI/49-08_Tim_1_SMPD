@@ -223,6 +223,19 @@ return [
         'address' => 'alamat',
         'join_date' => 'tanggal bergabung',
         'photo' => 'foto',
+
+        // Penerbit & Supplier
+        'contact_person' => 'kontak sales / narahubung',
+        'region' => 'wilayah asal',
+
+        // Fasilitas & Area
+        'type' => 'tipe',
+        'floor_number' => 'lantai',
+        'capacity' => 'kapasitas',
+        'reading_areas' => 'area baca',
+        'reading_areas.*' => 'area baca',
+        'facilities' => 'fasilitas',
+        'facilities.*' => 'fasilitas',
     ],
 
 ];
