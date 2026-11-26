@@ -214,6 +214,16 @@ return [
         'status' => 'status',
         'bio' => 'biografi',
 
+        // Anggota & Kartu
+        'membership_number' => 'nomor anggota',
+        'card_number' => 'nomor kartu',
+        'identity_number' => 'nomor identitas',
+        'membership_type_id' => 'jenis keanggotaan',
+        'phone' => 'nomor telepon',
+        'address' => 'alamat',
+        'join_date' => 'tanggal bergabung',
+        'photo' => 'foto',
+
         // Penerbit & Supplier
         'contact_person' => 'kontak sales / narahubung',
         'region' => 'wilayah asal',
