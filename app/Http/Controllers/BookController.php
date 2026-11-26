@@ -15,20 +15,15 @@ use Illuminate\View\View;
 
 class BookController extends Controller
 {
-    /**
-     * Nilai kolom status (enum di migration) beserta labelnya.
-     */
+
     private const STATUSES = [
         'available' => 'Tersedia',
         'unavailable' => 'Tidak tersedia',
     ];
 
-    /**
-     * Daftar buku (10 per halaman).
-     */
+
     public function index(): View
     {
-        // with() memuat relasi sekaligus agar tidak ada query tambahan untuk setiap baris.
         $books = Book::with(['category', 'publisher', 'authors'])
             ->orderByDesc('id')
             ->paginate(10);
@@ -39,9 +34,7 @@ class BookController extends Controller
         ]);
     }
 
-    /**
-     * Form tambah buku.
-     */
+
     public function create(): View
     {
         return view('books.create', [
@@ -51,14 +44,10 @@ class BookController extends Controller
         ]);
     }
 
-    /**
-     * Simpan buku baru beserta kategori dan pengarangnya.
-     */
     public function store(Request $request): RedirectResponse
     {
         $data = $request->validate($this->rules());
 
-        // Buku, kategori, dan relasi pengarang disimpan bersama dalam satu transaksi.
         $book = DB::transaction(function () use ($data) {
             [$bookAttributes, $authorIds] = $this->prepareBookPayload($data);
 
@@ -73,9 +62,6 @@ class BookController extends Controller
             ->with('success', "Buku \"{$book->title}\" berhasil ditambahkan.");
     }
 
-    /**
-     * Detail buku.
-     */
     public function show(Book $book): View
     {
         $book->load(['category', 'publisher', 'authors']);
@@ -86,9 +72,6 @@ class BookController extends Controller
         ]);
     }
 
-    /**
-     * Form edit buku.
-     */
     public function edit(Book $book): View
     {
         $book->load(['category', 'authors']);
@@ -100,9 +83,6 @@ class BookController extends Controller
         ]);
     }
 
-    /**
-     * Perbarui buku beserta kategori dan pengarangnya.
-     */
     public function update(Request $request, Book $book): RedirectResponse
     {
         $data = $request->validate($this->rules($book));
@@ -111,7 +91,6 @@ class BookController extends Controller
             [$bookAttributes, $authorIds] = $this->prepareBookPayload($data);
 
             $book->update($bookAttributes);
-            // sync(): pengarang yang tidak dipilih dilepas, yang dipilih ditambahkan.
             $book->authors()->sync($authorIds);
         });
 
@@ -120,16 +99,13 @@ class BookController extends Controller
             ->with('success', "Buku \"{$book->title}\" berhasil diperbarui.");
     }
 
-    /**
-     * Hapus buku. Kategori, penerbit, dan pengarang tidak ikut terhapus.
-     */
     public function destroy(Book $book): RedirectResponse
     {
         $title = $book->title;
 
         try {
             DB::transaction(function () use ($book) {
-                $book->authors()->detach(); // hapus baris tabel pivot book_authors
+                $book->authors()->detach(); 
                 $book->delete();
             });
         } catch (QueryException $exception) {
@@ -144,7 +120,7 @@ class BookController extends Controller
     }
 
     /**
-     * Aturan validasi untuk tambah dan edit buku.
+     * 
      *
      * @return array<string, mixed>
      */
@@ -152,12 +128,10 @@ class BookController extends Controller
     {
         return [
             'title' => ['required', 'string', 'max:255'],
-            // ISBN boleh kosong, tetapi harus unik (kecuali milik buku yang sedang diedit).
             'isbn' => ['nullable', 'string', 'max:20', Rule::unique('books', 'isbn')->ignore($book)],
             'description' => ['nullable', 'string'],
             'category_name' => ['required_without:category_id', 'nullable', 'string', 'max:255'],
             'category_id' => ['required_without:category_name', 'nullable', 'integer', 'exists:categories,id'],
-            // Hanya penerbit bertipe 'publisher'; distributor/supplier tidak boleh menjadi penerbit buku.
             'publisher_id' => ['required', 'integer', Rule::exists('publishers', 'id')->where('type', 'publisher')],
             'author_names' => ['nullable', 'string', 'max:500'],
             'authors' => ['nullable', 'array'],
@@ -169,8 +143,7 @@ class BookController extends Controller
     }
 
     /**
-     * Siapkan atribut buku (termasuk membuat kategori/pengarang baru dari input teks).
-     *
+     * 
      * @param  array<string, mixed>  $data
      * @return array{0: array<string, mixed>, 1: array<int, int>}
      */
@@ -201,7 +174,7 @@ class BookController extends Controller
     }
 
     /**
-     * Data pilihan untuk form (kategori, penerbit, pengarang, status).
+     * 
      *
      * @return array<string, mixed>
      */
